@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/unclay/claypot#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "pg": "4.4.4"
   }
 }
