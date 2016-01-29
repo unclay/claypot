@@ -1,0 +1,13 @@
+{
+  "name": "claypot",
+  "description": "note blog",
+  "scripts": {
+    "postdeploy": "bin/deploy",
+    "pr-predestroy": "bin/review"
+  },
+  "env": {
+  },
+  "addons": [
+
+  ]
+}
