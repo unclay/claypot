@@ -1,1 +1,24 @@
-Create by claypot
+<!doctype html>
+<html>
+	<head>
+		<title>Claypot</title>
+	</head>
+	<body>
+<script>
+void function(win, doc, tag, jssrc, name, analysis, element, node){
+    win.claypot = win.claypot || {};
+    win.claypot.name = name;
+    win.claypot.url = analysis;
+    element = doc.createElement(tag);
+    element.asyn = 1;
+    element.src  = jssrc;
+    node = doc.getElementsByTagName(tag)[0];
+    node.parentNode.insertBefore(element, node);
+}(window,document,"script","http://source.unclay.com/common/js/clog.min.js","clog", "http://c.unclay.com/c.gif");
+</script>
+
+<script>
+
+</script>
+	</body>
+</html>

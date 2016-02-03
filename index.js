@@ -3,7 +3,8 @@ const koa    = require('koa');
 const fs     = require('co-fs');
 const router = require('koa-router')();
 const os     = require('os');
-const koaPg     = require('koa-pg');
+const koaPg  = require('koa-pg');
+const serve  = require('koa-static');
 
 const app = koa();
 
@@ -24,7 +25,7 @@ app.use(koaPg(process.env.DATABASE_URL));
 // 系统信息
 router.get('/version', function *(next){
 	console.log( this );
-	var ip = this.request.ip.match(/(\d{1,3}\.){1,3}\d{1,3}/gi)
+	let ip = this.request.ip.match(/(\d{1,3}\.){1,3}\d{1,3}/gi)
 	this.body = {
 		code: 0,
 		data: {
@@ -60,29 +61,16 @@ router.get('/pg', function *(next){
 			list: result.rows
 		}
 	};
-	// this.body = {
-	// 	code: 0,
-	// 	data: {
-	// 		os: {
-	// 			freemem:           os.freemem(),
-	// 			hostname:          os.hostname(),
-	// 			networkInterfaces: os.networkInterfaces(),
-	// 			platform:          os.platform(),
-	// 			type:              os.type(),
-	// 			cpus:              os.cpus()
-	// 		},
-	// 		env: {
-	// 			PORT:         process.env.PORT || 0,
-	// 			DATABASE_URL: process.env.DATABASE_URL || ''
-	// 		},
-	// 		node: {
-	// 			version: process.version
-	// 		}
-	// 	}
-	// }
 });
 
-router.get('/a.gif', function *(next){
+router.get('/c.gif', function *(next){
+	let ip   = this.ip;
+	let type = this.query.t || '';
+	let ua   = this.request.header['user-agent'];
+	let url  = this.url.replace('/c.gif?', '');
+	let ref  = this.query.ref || '';
+	yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, url, ref) values('${ip}', '${type}', '${ua}', '${url}', '${ref}')`)
+	// let result = yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, url, ref) values('${ip}',2,3,4,5)`);
 	this.status = 204;
 });
 // var pg = require('pg');
@@ -101,9 +89,7 @@ router.get('/a.gif', function *(next){
 
 app.use(router.routes());
 
-app.use(function *(){
-	this.body = yield fs.readFile('./views' + this.url, 'utf-8');
-});
+app.use(serve(__dirname + '/views'));
 
 app.listen(port, function(){
 	console.log(`listen to ${port}`);
