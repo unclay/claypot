@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/unclay/claypot#readme",
   "dependencies": {
+    "co-fs": "^1.2.0",
     "express": "^4.13.4",
     "koa": "^1.1.2",
     "koa-router": "^5.3.0",
