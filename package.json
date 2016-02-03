@@ -18,6 +18,8 @@
   "homepage": "https://github.com/unclay/claypot#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "koa": "^1.1.2",
+    "koa-router": "^5.3.0",
     "pg": "4.4.4"
   }
 }
