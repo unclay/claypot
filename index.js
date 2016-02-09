@@ -1,10 +1,11 @@
 'use strict';
-const koa    = require('koa');
-const fs     = require('co-fs');
-const router = require('koa-router')();
-const os     = require('os');
-const koaPg  = require('koa-pg');
-const serve  = require('koa-static');
+const koa          = require('koa');
+const fs           = require('co-fs');
+const router       = require('koa-router')();
+const koaPg        = require('koa-pg');
+const staticCache  = require('koa-static-cache');
+const path         = require('path');
+const os           = require('os');
 
 const app = koa();
 
@@ -64,12 +65,12 @@ router.get('/pg', function *(next){
 });
 
 router.get('/c.gif', function *(next){
-	let ip   = this.ip;
-	let type = this.query.t || '';
-	let ua   = this.request.header['user-agent'];
-	let url  = this.url.replace('/c.gif?', '');
-	let ref  = this.query.ref || '';
-	yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, url, ref) values('${ip}', '${type}', '${ua}', '${url}', '${ref}')`)
+	let ip    = this.ip;
+	let type  = this.query.t || '';
+	let ua    = this.request.header['user-agent'];
+	let query = this.url.replace('/c.gif?', '');
+	let date  = parseInt(Date.now()/1000, 10);
+	yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, query, date) values('${ip}', '${type}', '${ua}', '${query}', '${date}')`)
 	// let result = yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, url, ref) values('${ip}',2,3,4,5)`);
 	this.status = 204;
 });
@@ -89,7 +90,9 @@ router.get('/c.gif', function *(next){
 
 app.use(router.routes());
 
-app.use(serve(__dirname + '/views'));
+app.use(staticCache( __dirname + '/views', {
+	maxAge: 365 * 24 * 60 * 60
+}));
 
 app.listen(port, function(){
 	console.log(`listen to ${port}`);
