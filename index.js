@@ -6,6 +6,7 @@ const koaPg        = require('koa-pg');
 const staticCache  = require('koa-static-cache');
 const path         = require('path');
 const os           = require('os');
+const moment       = require('moment');
 
 const app = koa();
 
@@ -74,6 +75,42 @@ router.get('/c.gif', function *(next){
 	// let result = yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, url, ref) values('${ip}',2,3,4,5)`);
 	this.status = 204;
 });
+
+router.get('/analysis', function *(next){
+	console.log( this.query.start, this.query.end );
+	let start   = this.query.start;
+	let end     = this.query.end;
+	let result  = yield this.pg.db.client.query_(`SELECT * FROM analysis WHERE date BETWEEN ${this.query.start} and ${this.query.end}`);
+	let dataObj = {};
+	for(let item of result.rows){
+		let dateYMD = moment.unix(item.date).format('YYYY-MM-DD');
+		dataObj[ dateYMD ] = dataObj[ dateYMD ] || 0;
+		dataObj[ dateYMD ]++;
+	}
+	this.body = {
+		error_code: 0,
+		data: dataObj
+	};
+});
+
+router.get('/sync', function *(next){
+	let analysis = require('./analysis');
+	// var a = 1;
+	// for(let val of analysis){
+	// 	// console.log( val.query );
+	// 	let ip    = val.ip;
+	// 	let type  = val.type;
+	// 	let ua    = val.ua;
+	// 	let query = val.query;
+	// 	let date  = val.date;
+	// 	console.log( `insert into analysis(ip, type, ua, query, date) values('${ip}', '${type}', '${ua}', '${query}', '${date}')` );
+	// 	if(a>59) yield this.pg.db.client.query_(`insert into analysis(ip, type, ua, query, date) values('${ip}', '${type}', '${ua}', '${query}', ${date})`);
+	// 	a++;
+	// }
+	this.body = 'ok';
+});
+
+
 // var pg = require('pg');
 // pg.connect(process.env.DATABASE_URL, function(err, client) {
 //   if (err){
