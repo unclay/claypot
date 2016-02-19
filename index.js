@@ -85,7 +85,7 @@ router.get('/analysis', function *(next){
 	} else {
 		let start   = this.query.start;
 		let end     = this.query.end;
-		let result  = yield this.pg.db.client.query_(`SELECT * FROM analysis WHERE date BETWEEN ${this.query.start} and ${this.query.end}`);
+		let result  = yield this.pg.db.client.query_(`SELECT * FROM analysis WHERE (date BETWEEN ${this.query.start} AND ${this.query.end}) AND type = 0 AND del_flag = '0'`);
 		let dataObj = {
 			pv: {},
 			os: {},

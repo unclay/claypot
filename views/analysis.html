@@ -8,9 +8,9 @@
 	</head>
 	<body>
 		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-	    <div id="JS_pv" style="width: 800px;height:400px;"></div>
-	    <div id="JS_manufacturers" style="width: 800px;height:400px;"></div>
-	    <div id="JS_viewport" style="width: 800px;height:2520px;"></div>
+	    <div id="JS_pv" style="width: 100%;height:400px;"></div>
+	    <div id="JS_manufacturers" style="width: 100%;height:400px;"></div>
+	    <div id="JS_viewport" style="width: 100%;height:2520px;"></div>
 	    <script type="text/javascript">
 	    $.ajax({
 	    	type: 'get',
@@ -20,9 +20,6 @@
 	    		end:   1456761600
 	    	},
 	    	success: function(data){
-	    		
-
-
 	    		drawPv(data.data.pv);
 	    		drawManufacturers(data.data.manufacturers);
 	    		drawViewport(data.data.viewport);
