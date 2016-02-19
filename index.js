@@ -77,7 +77,7 @@ router.get('/c.gif', function *(next){
 });
 
 router.get('/analysis', function *(next){
-	if( !!cache.analysis && cache.analysis.expire > moment().format('X') ){
+	if( !!cache.analysis && cache.analysis.expire > moment().format('X') && this.query.debug !== 'true' ){
 		this.body = {
 			error_code: 0,
 			data: cache.analysis.content
