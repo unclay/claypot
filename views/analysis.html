@@ -8,9 +8,9 @@
 	</head>
 	<body>
 		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-	    <div id="JS_pv" style="width: 600px;height:400px;"></div>
-	    <div id="JS_manufacturers" style="width: 600px;height:400px;"></div>
-	    <div id="JS_viewport" style="width: 800px;height:1500px;"></div>
+	    <div id="JS_pv" style="width: 800px;height:400px;"></div>
+	    <div id="JS_manufacturers" style="width: 800px;height:400px;"></div>
+	    <div id="JS_viewport" style="width: 800px;height:2520px;"></div>
 	    <script type="text/javascript">
 	    $.ajax({
 	    	type: 'get',
@@ -126,6 +126,7 @@ function drawManufacturers(manufacturers){
 }
 
 function drawViewport(viewport){
+	document.getElementById('JS_viewport').style.height = viewport.length * 25 + 'px';
 	var myChart  = echarts.init(document.getElementById('JS_viewport'));
 
 	option = {

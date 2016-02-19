@@ -139,12 +139,16 @@ router.get('/analysis', function *(next){
 				}
 			}
 			// viewport
-			let vp = item.ua.replace(/U;|Linux;|Android[ |\/]\d\.\d(\.\d;)?|zh-cn;|Mobile;|Touch;|ARM;|Browser\/AppleWebKit\d{3}\.\d{2}|Trident\/\d\.\d;/gi, '')
+			let vp = item.ua.replace(/like Mac OS X(;)?|U;|Linux;|Android[ |\/]\d\.\d(\.\d;)?|en-us|zh-cn(;)?|Mobile;|Touch;|ARM;|Browser\/AppleWebKit\d{3}\.\d{2}|Trident\/\d\.\d;|Release\/\d{2}\.\d{2}\.\d{4} |Windows Phone \d\.\d| rv:\d{2}\.\d;|IEMobile\/\d{2}\.\d;|Configuration\/CLDC-\d\.\d|Profile\/MIDP-\d\.\d/gi, '')
+							.replace(/(^ )|; ;/gi, '')
 							.match(/\([^\)]*\)/i);
 			if( !!vp ){
-				vp = vp[0].replace(/[\(\)]/g, '');
-				dataObj.viewport[vp] = dataObj.viewport[vp] || 0;
-				dataObj.viewport[vp]++;
+				// windows pc太多，排除掉
+				if( !vp[0].match(/Windows NT 6.1;/gi) ){
+					vp = vp[0].replace(/[\(\)]/g, '');
+					dataObj.viewport[vp] = dataObj.viewport[vp] || 0;
+					dataObj.viewport[vp]++;
+				}
 			}
 			
 			// .match(/\([^\)]*\)/i)
@@ -171,7 +175,10 @@ router.get('/analysis', function *(next){
 
 		this.body = {
 			error_code: 0,
-			data: body
+			data: body,
+			count: {
+				viewport: body.viewport.length
+			}
 		};
 	}
 	
