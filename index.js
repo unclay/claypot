@@ -139,7 +139,8 @@ router.get('/analysis', function *(next){
 				}
 			}
 			// viewport
-			let vp = item.ua.match(/\([^\)]*\)/i);
+			let vp = item.ua.replace(/U;|Linux;|Android[ |\/]\d\.\d(\.\d;)?|zh-cn;|Mobile;|Touch;|ARM;|Browser\/AppleWebKit\d{3}\.\d{2}|Trident\/\d\.\d;/gi, '')
+							.match(/\([^\)]*\)/i);
 			if( !!vp ){
 				vp = vp[0].replace(/[\(\)]/g, '');
 				dataObj.viewport[vp] = dataObj.viewport[vp] || 0;
