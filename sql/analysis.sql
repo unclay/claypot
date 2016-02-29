@@ -23,3 +23,10 @@ update analysis
 set del_flag = 1
 where type = 1
 and query like '%=Script%20error.&%'
+
+GRANT ALL PRIVILEGES ON TABLE analysis TO phzxoeqkocdqjv;
+alter table analysis alter column query varchar(100000);
+
+alter table analysis nocheck CONSTRAINT all;
+Alter Table analysis ALTER column query VARCHAR(100000);
+alter table analysis check constraint all;
